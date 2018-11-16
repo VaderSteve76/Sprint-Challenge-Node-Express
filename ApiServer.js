@@ -20,8 +20,9 @@ server.get('/projects', (req, res) => {
 })
 
 server.get('/projects/:id', (req, res) => {
+  const { id } = req.params;
   projectModel
-    .get(req.params.id)
+    .get(id)
     .then(project => {
       res.status(200).json(project);
     })
@@ -34,12 +35,13 @@ server.post('/projects', (req, res) => {
   const { name, description } = req.body;
   const newProject = { name, description };
 
-  if(!newProject){
+  if (!newProject){
     res
       .status(400)
       .json({ errorMessage: "You have to enter something" });
   } else {
-    projectModel.insert(newProject)
+    projectModel
+      .insert(newProject)
       .then(newProjectRes => {
         res.status(201).json({ "posted": newProjectRes });
       })
@@ -64,8 +66,9 @@ server.put('/projects/:id', (req, res) => {
 })
 
 server.delete("/projects/:id", (req, res) => {
+  const { id } = req.params;
   projectModel
-    .remove(req.params.id)
+    .remove(id)
     .then(count => {
       res.status(201).json(count)
     })
@@ -75,8 +78,9 @@ server.delete("/projects/:id", (req, res) => {
 })
 
 server.get('/projectActions/:id', (req, res) => {
+  const { id } = req.params;
   projectModel
-    .getProjectActions(req.params.id)
+    .getProjectActions(id)
     .then(actions => {
       res.status(200).json(actions);
     })
@@ -97,8 +101,9 @@ server.get('/actions', (req, res) => {
 })
 
 server.get('/actions/:id', (req, res) => {
+  const { id } = req.params;
   actionModel
-    .get(req.params.id)
+    .get(id)
     .then(action => {
       res.status(200).json(action);
     })
@@ -141,8 +146,9 @@ server.put('/actions/:id', (req, res) => {
 })
 
 server.delete("/actions/:id", (req, res) => {
+  const { id } = req.params;
   actionModel
-    .remove(req.params.id)
+    .remove(id)
     .then(count => {
       res.status(201).json(count)
     })

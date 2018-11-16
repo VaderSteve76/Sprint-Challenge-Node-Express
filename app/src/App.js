@@ -12,7 +12,7 @@ const url = 'http://localhost:8000';
 
 
 class App extends Component {
-  constructor(){
+  constructor() {
     super();
     this.state = {
       projects: [],
@@ -20,7 +20,7 @@ class App extends Component {
     }
   }
 
-  getProjects(){
+  getProjects() {
     axios
       .get(`${url}/projects`)
       .then(res => this.setState({ projects: res.data }))
@@ -28,7 +28,7 @@ class App extends Component {
     console.log(this.state.projects);
   }
 
-  getActions(){
+  getActions() {
     axios
       .get(`${url}/actions`)
       .then(res => this.setState({ actions: res.data }))
