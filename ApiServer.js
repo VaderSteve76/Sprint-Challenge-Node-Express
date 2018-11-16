@@ -37,7 +37,7 @@ server.post('/projects', (req, res) => {
   if(!newProject){
     res
       .status(400)
-      .json({ errorMessage: "Ya gotta give me something here" });
+      .json({ errorMessage: "You have to enter something" });
   } else {
     projectModel.insert(newProject)
       .then(newProjectRes => {
@@ -52,7 +52,7 @@ server.post('/projects', (req, res) => {
 server.put('/projects/:id', (req, res) => {
   const { id } = req.params;
   const updatedProject = req.body;
-  
+
   projectModel
     .update(id, updatedProject)
     .then(updateProject => {
@@ -73,3 +73,82 @@ server.delete("/projects/:id", (req, res) => {
       res.status(500).json({ error: err })
     })
 })
+
+server.get('/projectActions/:id', (req, res) => {
+  projectModel
+    .getProjectActions(req.params.id)
+    .then(actions => {
+      res.status(200).json(actions);
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    });
+})
+
+server.get('/actions', (req, res) => {
+  actionModel
+    .get()
+    .then(actions => {
+      res.status(200).json(actions);
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    });
+})
+
+server.get('/actions/:id', (req, res) => {
+  actionModel
+    .get(req.params.id)
+    .then(action => {
+      res.status(200).json(action);
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    });
+})
+
+server.post('/actions', (req, res) => {
+  const { project_id, description, notes } = req.body;
+  const newAction = { project_id, description, notes };
+
+  if (!newAction){
+    res
+      .status(400)
+      .json({ errorMessage: "You have to enter something" });
+  } else {
+    actionModel.insert(newAction)
+      .then(newActionRes => {
+        res.status(201).json({ "post": "New Action Added!" });
+      })
+      .catch(err => {
+        res.send(err);
+      });
+  };
+});
+
+server.put('/actions/:id', (req, res) => {
+  const { id } = req.params;
+  const updatedAction = req.body;
+
+  actionModel
+    .update(id, updatedAction)
+    .then(updateAction => {
+      res.status(201).json({ "Project Updated": updateAction });
+    })
+    .catch(err => {
+      res.send(err);
+    });
+})
+
+server.delete("/actions/:id", (req, res) => {
+  actionModel
+    .remove(req.params.id)
+    .then(count => {
+      res.status(201).json(count)
+    })
+    .catch(err => {
+      res.status(500).json({ error: err })
+    })
+})
+
+module.exports = server;
